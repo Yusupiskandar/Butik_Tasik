@@ -1,6 +1,7 @@
 import path from 'node:path';
 import express from 'express';
 import { config, SEGMEN } from './config.js';
+import { db } from './db/index.js';
 import { formatRupiah } from './services/format.js';
 import { pub } from './routes/public.js';
 import { api } from './routes/api.js';
@@ -29,6 +30,12 @@ app.use((err, req, res, _next) => {
   console.error(err);
   res.status(500).send('Terjadi kesalahan di server');
 });
+
+// Server baru (database masih kosong): isi data koleksi contoh otomatis, supaya website langsung tampil.
+if (db.prepare('SELECT COUNT(*) AS n FROM collections').get().n === 0) {
+  console.log('Database masih kosong, mengisi data koleksi contoh...');
+  await import('./db/seed.js');
+}
 
 app.listen(config.port, () => {
   console.log(`${config.namaButik} berjalan di http://localhost:${config.port}`);
