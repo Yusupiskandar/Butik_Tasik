@@ -1,0 +1,42 @@
+<%- include('partials/head', { judul: collection.nama }) %>
+<%- include('partials/header') %>
+
+<main class="runway">
+  <section class="panggung" aria-label="Runway <%= collection.nama %>">
+    <div class="panggung__intro">
+      <h1><%= collection.nama %></h1>
+      <p><%= collection.tagline %></p>
+    </div>
+
+    <div class="panggung__deret" data-deret></div>
+
+    <div class="panggung__info">
+      <div class="label-kecil" data-nomor></div>
+      <h2 class="panggung__nama" data-nama></h2>
+      <p class="panggung__desk" data-deskripsi></p>
+      <div class="warna" role="radiogroup" aria-label="Pilihan warna" data-warna></div>
+      <div class="progres" data-progres></div>
+    </div>
+
+    <div class="panggung__nav">
+      <button type="button" class="lanjut" data-lanjut hidden></button>
+      <button type="button" class="bulat" data-sebelum aria-label="Set sebelumnya">&larr;</button>
+      <button type="button" class="bulat" data-berikut aria-label="Set berikutnya">&rarr;</button>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Isi set">
+    <div class="panel__kepala">
+      <span class="label-kecil">Isi Set</span>
+      <button type="button" class="tombol-teks" data-tambah-look></button>
+    </div>
+    <ul class="panel__daftar" data-daftar-item></ul>
+  </aside>
+</main>
+
+<%- include('partials/cart') %>
+
+<script type="application/json" id="data-runway"><%- dataJson %></script>
+<script type="module" src="/js/runway.js"></script>
+</body>
+</html>

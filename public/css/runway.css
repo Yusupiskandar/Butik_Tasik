@@ -1,0 +1,198 @@
+/* ---------- Runway ---------- */
+.runway {
+  display: grid;
+  /* Panel isi look ikut melebar di layar besar (min 380px, maks 480px). */
+  grid-template-columns: minmax(0, 1fr) clamp(380px, 30vw, 480px);
+  min-height: 560px;
+}
+
+.panggung {
+  position: relative;
+  overflow: hidden;
+  /* Disamakan dengan latar studio foto model (#ECE6D5 → #E6DFD0) supaya foto menyatu. */
+  background: linear-gradient(180deg, #ede7d7 0%, #ebe4d3 60%, #e6dfd0 100%);
+}
+
+.panggung__intro {
+  position: absolute; z-index: 150; top: clamp(20px, 5vh, 48px); left: clamp(16px, 4vw, 48px);
+  pointer-events: none;
+}
+.panggung__intro h1 {
+  font-family: var(--font-judul); font-weight: 600; letter-spacing: -0.03em;
+  font-size: clamp(36px, 5vw, 64px); line-height: 1; margin: 0 0 12px;
+}
+.panggung__intro p { margin: 0; max-width: 30ch; color: var(--bt-teks-2); }
+
+.panggung__deret { position: absolute; inset: 0; }
+/* Gradasi di kiri supaya judul & nama look tetap terbaca di atas deretan model */
+.panggung::after {
+  content: ''; position: absolute; inset: 0; z-index: 120; pointer-events: none;
+  background: linear-gradient(90deg, rgb(237 231 215 / .92) 0%, rgb(237 231 215 / .55) 26%, transparent 46%);
+}
+
+.slot {
+  /* Look aktif berdiri sedikit di kanan tengah panggung; antrean memanjang ke kiri. */
+  position: absolute; bottom: 3%; left: 62%; translate: -50% 0;
+  height: 80%; aspect-ratio: 200 / 520;
+  padding: 0; border: 0; background: none;
+  transform-origin: 50% 100%;
+  /* Perpindahan halus: durasi lebih panjang, easing pelan di awal & akhir (seperti kamera bergeser). */
+  --geser: 1.05s;
+  --halus: cubic-bezier(.65, .05, .25, 1);
+  transition: transform var(--geser) var(--halus), opacity var(--geser) var(--halus), filter var(--geser) var(--halus);
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+.slot--lebar { aspect-ratio: 530 / 520; left: 56%; height: 74%; }
+
+/* Foto model: latar foto disamarkan ke latar panggung dengan tepi memudar.
+   Tubuh model ada di ±33–68% lebar foto, jadi bagian buram dibuat sempit di luar itu
+   supaya antrean bisa rapat tanpa "kotak" foto menutupi model di belakangnya. */
+.slot--foto { aspect-ratio: 687 / 1024; height: 86%; bottom: 8%; }
+.slot--lebar.slot--foto { aspect-ratio: 1 / 1; height: 70%; left: 62%; bottom: 14%; }
+.foto {
+  width: 100%; height: 100%; display: block; object-fit: cover; user-select: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 24%, #000 33%, #000 67%, transparent 76%),
+                      linear-gradient(180deg, transparent 0, #000 8%, #000 94%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(90deg, transparent 24%, #000 33%, #000 67%, transparent 76%),
+                      linear-gradient(180deg, transparent 0, #000 8%, #000 94%, transparent 100%);
+          mask-composite: intersect;
+}
+.slot--lebar .foto {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%),
+                      linear-gradient(180deg, transparent 0, #000 6%, #000 95%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%),
+                      linear-gradient(180deg, transparent 0, #000 6%, #000 95%, transparent 100%);
+}
+.item__thumb--foto { background-color: #ece6d5; background-repeat: no-repeat; }
+.slot--aktif { cursor: default; }
+.slot:focus-visible { outline: 2px solid var(--bt-hijau); outline-offset: 4px; border-radius: 8px; }
+.figur { width: 100%; height: 100%; display: block; overflow: visible; }
+body:not(.siap) .slot, .tanpa-transisi .slot { transition: none !important; }
+
+/* Look yang sudah lewat menghilang cepat supaya tidak jadi bayangan di atas look baru. */
+.slot--lewat {
+  transition: transform var(--geser) var(--halus), opacity .28s ease-out, filter .28s ease-out;
+}
+
+/* Ganti warna: foto/ilustrasi baru muncul dengan memudar. */
+.slot > .foto, .slot > .figur { animation: muncul .5s ease both; }
+@keyframes muncul { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .slot { transition-duration: .01s; }
+  .slot > .foto, .slot > .figur { animation: none; }
+}
+
+.panggung__info {
+  position: absolute; z-index: 150; left: clamp(16px, 4vw, 48px); bottom: 28px;
+}
+.panggung__nama {
+  font-family: var(--font-judul); font-weight: 600; letter-spacing: -0.03em;
+  font-size: clamp(40px, 5.5vw, 72px); line-height: 1; margin: 6px 0 6px;
+}
+.panggung__nama--panjang { font-size: clamp(34px, 4vw, 52px); }
+.panggung__desk { margin: 0 0 14px; color: var(--bt-teks-2); max-width: 32ch; }
+
+.warna { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+.warna__titik {
+  width: 26px; height: 26px; border-radius: 50%; padding: 0;
+  background: var(--c); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--bt-garis);
+}
+.warna__titik[aria-checked='true'] { box-shadow: 0 0 0 2px var(--bt-hijau-tua); }
+.warna__nama { font-size: 13px; color: var(--bt-teks-2); margin-left: 4px; }
+
+.progres { display: flex; gap: 4px; }
+.progres span { width: 22px; height: 3px; border-radius: 2px; background: var(--bt-garis); transition: background .3s; }
+.progres span.aktif { background: var(--bt-teks); }
+
+.panggung__nav { position: absolute; z-index: 150; right: 20px; bottom: 24px; display: flex; align-items: center; gap: 8px; }
+
+/* Petunjuk "Lanjut ke Pria →" di set terakhir sebuah tab. */
+.lanjut {
+  height: 42px; padding: 0 18px; border-radius: 21px; margin-right: 4px;
+  border: 1px solid var(--bt-garis); background: rgb(255 255 255 / .85); color: var(--bt-teks);
+  font-size: 14px; white-space: nowrap; backdrop-filter: blur(6px);
+  animation: lanjut-masuk .6s cubic-bezier(.22, .8, .24, 1) both .3s;
+}
+.lanjut[hidden] { display: none; }
+.lanjut strong { color: var(--bt-hijau-tua); font-weight: 600; }
+.lanjut:hover { border-color: var(--bt-hijau); }
+@keyframes lanjut-masuk { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+
+.bulat {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--bt-garis); background: #fff; color: var(--bt-teks);
+  display: inline-grid; place-items: center; font-size: 18px; line-height: 1;
+  transition: background .2s, border-color .2s;
+}
+.bulat:hover:not(:disabled) { border-color: var(--bt-hijau); }
+.bulat:disabled { opacity: .4; cursor: default; }
+.bulat--kecil { width: 30px; height: 30px; font-size: 16px; }
+
+/* ---------- Panel isi look ---------- */
+.panel { border-left: 1px solid var(--bt-garis); background: var(--bt-krem); display: flex; flex-direction: column; min-height: 0; }
+.panel__kepala {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 16px 24px; border-bottom: 1px solid var(--bt-garis);
+}
+.tombol-teks {
+  border: 0; background: none; padding: 4px 0; font-weight: 600; color: var(--bt-hijau-tua);
+}
+.tombol-teks:hover { text-decoration: underline; }
+.tombol-teks--kecil { font-size: 12px; font-weight: 500; }
+
+.panel__daftar {
+  list-style: none; margin: 0; padding: 0; overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Scrollbar disembunyikan, tapi daftar tetap bisa di-scroll (mouse, trackpad, sentuh, keyboard). */
+  scrollbar-width: none;
+}
+.panel__daftar::-webkit-scrollbar { display: none; }
+/* Gradasi pudar di bawah sebagai tanda masih ada item lain; hilang saat sudah di paling bawah. */
+.panel__daftar--ada-lagi {
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 56px), transparent);
+          mask-image: linear-gradient(180deg, #000 calc(100% - 56px), transparent);
+}
+.item {
+  position: relative; display: grid; grid-template-columns: 1fr 120px; gap: 20px; align-items: center;
+  padding: 26px 24px; border-bottom: 1px solid var(--bt-garis);
+}
+.item__teks { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.item__teks strong { font-weight: 600; }
+.item__harga { color: var(--bt-teks-2); font-size: 14px; }
+.item__thumb {
+  width: 120px; height: 136px; border-radius: 8px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--c) 70%, #fff), var(--c));
+  display: grid; place-items: center;
+  font-family: var(--font-judul); font-size: 30px; color: rgb(255 255 255 / .85);
+}
+.item__tambah { position: absolute; right: 30px; bottom: 32px; box-shadow: 0 2px 6px rgb(0 0 0 / .08); }
+.item--lepas .item__thumb { opacity: .3; filter: grayscale(1); }
+.item--lepas strong { color: var(--bt-teks-2); font-weight: 500; }
+
+/* Desktop: header + runway pas satu layar, tanpa scrollbar halaman.
+   Tinggi runway = sisa layar setelah header (dihitung otomatis, tidak pakai angka tebakan). */
+@media (min-width: 901px) {
+  body:has(.runway) { height: 100svh; display: flex; flex-direction: column; }
+  body:has(.runway) .runway { flex: 1; min-height: 0; }
+}
+
+/* ---------- HP & tablet ---------- */
+@media (max-width: 900px) {
+  .runway { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  .panggung { height: 78svh; min-height: 520px; }
+  /* tinggi slot 62% dari panggung (78svh) → lebar ≈ 18.6svh; diposisikan di tengah */
+  .slot { height: 62%; left: 58%; bottom: 150px; }
+  .slot--lebar { height: auto; width: 92%; left: 50%; bottom: 160px; }
+  .panggung__intro p { display: none; }
+  .panggung__info { bottom: 18px; }
+  .panggung__nav { bottom: 18px; right: 16px; }
+  .panel { border-left: 0; border-top: 1px solid var(--bt-garis); }
+  .panggung::after { background: linear-gradient(0deg, rgb(230 223 208 / .92) 0%, transparent 32%); }
+  .slot--foto { height: 72%; bottom: 120px; left: 60%; }
+  .slot--lebar.slot--foto { height: auto; width: 100%; left: 50%; bottom: 130px; }
+  .panel__kepala { flex-wrap: wrap; }
+  .lanjut { position: absolute; right: 0; bottom: 52px; height: 36px; padding: 0 14px; font-size: 13px; margin: 0; }
+}

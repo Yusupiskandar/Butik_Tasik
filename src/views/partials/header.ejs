@@ -1,0 +1,18 @@
+<header class="header">
+  <div class="header__atas">
+    <a class="brand" href="/">
+      <img src="/img/logo-bt.svg" alt="">
+      <span class="brand__nama"><%= namaButik %></span>
+      <span class="brand__sub">Busana<br>Hari Raya</span>
+    </a>
+    <button class="keranjang-btn" type="button" data-buka-keranjang aria-label="Buka keranjang">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span class="keranjang-btn__label">Keranjang</span> <span class="keranjang-btn__jumlah" data-jumlah-keranjang>0</span>
+    </button>
+  </div>
+  <nav class="segmen" aria-label="Kategori">
+    <% SEGMEN.forEach(function (s) { %>
+      <a href="/?segmen=<%= s.kode %>" <%- s.kode === segmen ? 'aria-current="page"' : '' %>><%= s.label %></a>
+    <% }) %>
+  </nav>
+</header>

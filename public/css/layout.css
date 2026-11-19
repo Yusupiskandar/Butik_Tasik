@@ -1,0 +1,42 @@
+.header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bt-krem);
+  border-bottom: 1px solid var(--bt-garis);
+}
+.header__atas {
+  height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand img { width: 36px; height: 36px; }
+.brand__nama { font-family: var(--font-judul); font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+.brand__sub { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bt-teks-2); line-height: 1.2; border-left: 1px solid var(--bt-garis); padding-left: 10px; }
+
+.keranjang-btn {
+  display: flex; align-items: center; gap: 8px;
+  border: 0; background: none; font-weight: 500;
+}
+.keranjang-btn__jumlah {
+  min-width: 22px; height: 22px; border-radius: 11px; padding: 0 6px;
+  background: var(--bt-hijau-tua); color: #fff; font-size: 12px;
+  display: inline-grid; place-items: center;
+}
+
+.segmen {
+  display: flex; gap: 24px; overflow-x: auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+  border-top: 1px solid var(--bt-garis);
+}
+.segmen a {
+  padding: 12px 0; white-space: nowrap; text-decoration: none;
+  color: var(--bt-teks-2); border-bottom: 2px solid transparent;
+  transition: color .3s ease, border-color .3s ease;
+}
+@media (max-width: 600px) {
+  .brand__sub, .keranjang-btn__label { display: none; }
+  .brand__nama { font-size: 21px; }
+}
+
+.segmen a[aria-current='page'] { color: var(--bt-teks); font-weight: 600; border-color: var(--bt-hijau); }
+

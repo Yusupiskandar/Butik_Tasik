@@ -1,0 +1,35 @@
+/* Token desain Butik Tasik — hijau daun muda di atas krem hangat */
+:root {
+  --bt-hijau: #8dc63f;        /* hijau daun muda (warna merek) */
+  --bt-hijau-tua: #3f6f1c;    /* tombol & teks aksen */
+  --bt-hijau-muda: #eaf4dc;   /* latar notifikasi */
+  --bt-krem: #faf7ef;         /* latar utama */
+  --bt-krem-2: #f2eee3;       /* panel */
+  --bt-garis: #e3ddcf;
+  --bt-teks: #22261d;
+  --bt-teks-2: #6b6f63;
+
+  --font-judul: 'Montserrat', system-ui, sans-serif;
+  --font-teks: 'Montserrat', system-ui, sans-serif;
+
+  --radius: 10px;
+  --header-h: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; overflow-x: clip; }
+body {
+  background: var(--bt-krem);
+  color: var(--bt-teks);
+  font-family: var(--font-teks);
+  font-size: 15px;
+  line-height: 1.5;
+}
+a { color: inherit; }
+button { font: inherit; cursor: pointer; }
+.label-kecil {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bt-teks-2);
+}

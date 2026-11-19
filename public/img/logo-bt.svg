@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Butik Tasik">
+  <path d="M32 3c9 6 14 14 14 22S41 39 32 45C23 39 18 33 18 25S23 9 32 3z" fill="#8DC63F"/>
+  <path d="M32 6v38" stroke="#5E9A2B" stroke-width="1.6" fill="none"/>
+  <text x="32" y="60" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" font-weight="700" fill="#2F5A14" letter-spacing="1">BT</text>
+</svg>

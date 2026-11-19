@@ -1,0 +1,25 @@
+<div class="laci-latar" data-laci-latar hidden></div>
+<aside class="laci" data-laci aria-label="Keranjang" aria-hidden="true">
+  <div class="laci__kepala">
+    <h2>Keranjang <span data-laci-jumlah></span></h2>
+    <button type="button" class="tombol-teks" data-hapus-semua>Hapus semua</button>
+    <button type="button" class="bulat bulat--kecil" data-tutup-keranjang aria-label="Tutup">&times;</button>
+  </div>
+  <div class="laci__undo" data-undo hidden>
+    <span data-undo-teks></span>
+    <button type="button" class="tombol-teks" data-undo-btn>Batalkan</button>
+  </div>
+  <ul class="laci__daftar" data-laci-daftar></ul>
+  <div class="laci__kosong" data-laci-kosong hidden>
+    <h3>Keranjang masih kosong</h3>
+    <p>Tekan + di samping item, atau ambil satu set sekaligus.</p>
+    <button type="button" class="tombol" data-tutup-keranjang>Lihat koleksi</button>
+  </div>
+  <div class="laci__kaki" data-laci-kaki>
+    <div class="laci__total"><span>Subtotal <small data-laci-pcs></small></span><strong data-laci-total></strong></div>
+    <input class="input" type="text" maxlength="80" placeholder="Nama pemesan (opsional)" data-nama-pemesan>
+    <button type="button" class="tombol tombol--wa" data-pesan-wa>Pesan via WhatsApp</button>
+    <p class="laci__catatan" data-wa-catatan></p>
+  </div>
+</aside>
+<div class="toast" data-toast role="status" aria-live="polite"></div>
