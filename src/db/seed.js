@@ -44,7 +44,8 @@ const ITEMS = {
   kurtaAsoka: ['Koko Panjang Anak', 'Atasan', 179000, 'Koko panjang anak, kerah shanghai.', true],
 };
 
-// [slug, segmen, nama, deskripsi, [warna...], [[item, peran?, opsional?], ...]]
+// [kodeFoto, segmen, nama, deskripsi, [warna...], [[item, peran?, opsional?], ...]]
+// kodeFoto = nama file foto di public/img/looks/; slug link dibuat dari nama.
 const LOOKS = [
   ['melati', 'wanita', 'Syahdu', 'Gamis lembut dengan bordir melati.', ['hijauPupus', 'gading', 'dustyRose'],
     [['gamisMelati'], ['pashminaPlisket'], ['brosBunga', null, true]]],
@@ -100,12 +101,15 @@ const seed = db.transaction(() => {
   const insLookItem = db.prepare('INSERT INTO look_items (look_id, item_id, peran, opsional, urutan) VALUES (?, ?, ?, ?, ?)');
   const insVariant = db.prepare('INSERT OR IGNORE INTO item_variants (item_id, warna, ukuran, stok, sku) VALUES (?, ?, ?, ?, ?)');
 
+  // Slug untuk link dibuat dari nama set: "Sarimbit Fitri" → "sarimbit-fitri".
+  const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
   const urutanPerSegmen = {};
-  for (const [slug, segmen, nama, deskripsi, warna, isi] of LOOKS) {
+  for (const [kodeFoto, segmen, nama, deskripsi, warna, isi] of LOOKS) {
     const urutan = (urutanPerSegmen[segmen] = (urutanPerSegmen[segmen] ?? -1) + 1);
-    const lookId = insLook.run(collectionId, slug, segmen, nama, deskripsi, urutan).lastInsertRowid;
-    // Foto model AI demo baru tersedia untuk warna pertama tiap look (public/img/looks/<slug>.webp).
-    warna.forEach((w, i) => insColour.run(lookId, WARNA[w][0], WARNA[w][1], i === 0 ? `/img/looks/${slug}.webp` : null, i));
+    const lookId = insLook.run(collectionId, slugify(nama), segmen, nama, deskripsi, urutan).lastInsertRowid;
+    // Foto model AI demo baru tersedia untuk warna pertama tiap set (public/img/looks/<kodeFoto>.webp).
+    warna.forEach((w, i) => insColour.run(lookId, WARNA[w][0], WARNA[w][1], i === 0 ? `/img/looks/${kodeFoto}.webp` : null, i));
 
     isi.forEach(([kode, peran = null, opsional = false], i) => {
       insLookItem.run(lookId, itemId[kode], peran ?? '', opsional ? 1 : 0, i);

@@ -9,7 +9,7 @@ Rencana lengkap ada di [PLAN.md](PLAN.md).
 npm install
 cp .env.example .env     # isi WA_NUMBER dengan format 62xxxx
 npm run seed             # isi data contoh (menghapus data lama)
-npm run dev              # http://localhost:3000, auto-restart saat file berubah
+npm run dev              # http://localhost:3005, auto-restart saat file berubah
 ```
 
 ## Pasang di server

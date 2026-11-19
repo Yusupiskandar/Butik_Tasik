@@ -70,7 +70,7 @@ function pasangSegmen(kode, idxAwal) {
 
 function tandaiTab(kode) {
   document.querySelectorAll('.segmen a').forEach((a) => {
-    const cocok = new URL(a.href).searchParams.get('segmen') === kode;
+    const cocok = a.dataset.segmen === kode;
     cocok ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current');
   });
 }
@@ -190,10 +190,8 @@ el.daftar.addEventListener('scroll', cekSisaDaftar, { passive: true });
 addEventListener('resize', cekSisaDaftar);
 
 function urlSekarang() {
-  const url = new URL(location.href);
-  url.searchParams.set('segmen', segmen);
-  url.searchParams.set('look', looks[aktif].slug);
-  return url;
+  // Link bersih: /wanita/syahdu, /anak-perempuan/ceria, /keluarga/sarimbit-fitri
+  return `/${data.urlSegmen[segmen]}/${looks[aktif].slug}`;
 }
 
 function render() {
@@ -231,7 +229,7 @@ function segmenTetangga(arah) {
 }
 
 const labelSegmen = (kode) =>
-  [...document.querySelectorAll('.segmen a')].find((a) => new URL(a.href).searchParams.get('segmen') === kode)?.textContent.trim() ?? kode;
+  document.querySelector(`.segmen a[data-segmen="${kode}"]`)?.textContent.trim() ?? kode;
 
 function pilih(i) {
   if (sedangGanti) return;
@@ -275,10 +273,7 @@ async function gantiSegmen(kode, { push = true, look } = {}) {
   // Tambah entri riwayat DULU (sebelum render memanggil replaceState), supaya tombol Back kembali ke tab sebelumnya.
   const tambahRiwayat = () => {
     if (!push) return;
-    const u = new URL(location.href);
-    u.searchParams.set('segmen', kode);
-    u.searchParams.delete('look');
-    history.pushState({ segmen: kode }, '', u);
+    history.pushState({ segmen: kode }, '', `/${data.urlSegmen[kode]}`);
   };
 
   if (kurangiGerak) {
@@ -334,18 +329,19 @@ async function gantiSegmen(kode, { push = true, look } = {}) {
 document.querySelector('.segmen').addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
   if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return; // biarkan buka di tab baru
-  const kode = new URL(a.href).searchParams.get('segmen');
+  const kode = a.dataset.segmen;
   if (!data.semua[kode]) return;
   e.preventDefault();
   gantiSegmen(kode);
 });
 
 window.addEventListener('popstate', () => {
-  const p = new URL(location.href).searchParams;
-  const kode = data.semua[p.get('segmen')] ? p.get('segmen') : 'wanita';
-  if (kode !== segmen) gantiSegmen(kode, { push: false, look: p.get('look') });
+  // Baca link bersih /<tab>/<set> saat tombol Back/Forward ditekan.
+  const [bagTab, bagSet] = location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  const kode = Object.keys(data.urlSegmen).find((k) => data.urlSegmen[k] === bagTab) ?? URUTAN_SEGMEN[0];
+  if (kode !== segmen) gantiSegmen(kode, { push: false, look: bagSet });
   else {
-    const i = looks.findIndex((l) => l.slug === p.get('look'));
+    const i = looks.findIndex((l) => l.slug === bagSet);
     if (i >= 0) pilih(i);
   }
 });

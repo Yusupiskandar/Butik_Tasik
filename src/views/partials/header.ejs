@@ -12,7 +12,7 @@
   </div>
   <nav class="segmen" aria-label="Kategori">
     <% SEGMEN.forEach(function (s) { %>
-      <a href="/?segmen=<%= s.kode %>" <%- s.kode === segmen ? 'aria-current="page"' : '' %>><%= s.label %></a>
+      <a href="/<%= s.url %>" data-segmen="<%= s.kode %>" <%- s.kode === segmen ? 'aria-current="page"' : '' %>><%= s.label %></a>
     <% }) %>
   </nav>
 </header>
